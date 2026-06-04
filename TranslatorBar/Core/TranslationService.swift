@@ -65,7 +65,9 @@ final class TranslationService: TranslationServiceProtocol {
             let responseData: ResponseData
         }
         let decoded = try JSONDecoder().decode(Response.self, from: data)
-        let text = decoded.responseData.translatedText
+        let raw = decoded.responseData.translatedText
+        // MyMemory 有时返回 URL-encoded 字符串，需要解码
+        let text = raw.removingPercentEncoding ?? raw
         guard !text.isEmpty else { throw TranslationError.emptyResult }
         return text
     }
