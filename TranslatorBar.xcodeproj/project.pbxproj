@@ -1,0 +1,368 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A700792FC2F439CB16D4AB5 = {isa = PBXBuildFile; fileRef = BCA87F365063479BBC65A4C8; };
+		EFE4648DD7EC420EBF8A65FD = {isa = PBXBuildFile; fileRef = 115E3A8C2340416CA3354089; };
+		8545298C84E7426FAE720865 = {isa = PBXBuildFile; fileRef = 643D42AE632344639A068063; };
+		E8DE3182C0304FE1826FC89A = {isa = PBXBuildFile; fileRef = 6CFCA23E9A5042C3A336AFE0; };
+		C987A2ECB348498D93DCC81D = {isa = PBXBuildFile; fileRef = 545E52BEF6AE4D8198F0D2D3; };
+		0B91B84E41CF4F64B96616E4 = {isa = PBXBuildFile; fileRef = 1DC208B17D6B42598B131064; };
+		615C1B38F97D4F21B707F1F9 = {isa = PBXBuildFile; fileRef = 7F8F9EF17FBF49CE80603B71; };
+		FA1BC4ACF8354D4084D98897 = {isa = PBXBuildFile; fileRef = 0E424B9E78E2427CB8D450D9; };
+		E6A9D0B317E541B2B584EA08 = {isa = PBXBuildFile; fileRef = 68A5E9648CD34207A364105D; };
+		66468D03653C4F7CAB66FFC2 = {isa = PBXBuildFile; fileRef = 9D3B3E66E1A543A1A5003A3B; };
+		3F2F4EAFD40C426693A59E04 = {isa = PBXBuildFile; fileRef = E378D8E3C5C44483BCC1573A; };
+		511EDCA24CA1400687851D05 = {isa = PBXBuildFile; fileRef = EBB01B677F0C4041AFFD4829; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D2743449C79647C49DAC2874 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TranslatorBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		852D54B343F7437485932F48 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TranslatorBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBB851821F714AD893E2A356 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "TranslatorBar/Info.plist"; sourceTree = "<group>"; };
+		EF9045DB37E3429D995DDA71 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "TranslatorBar.entitlements"; path = "TranslatorBar/TranslatorBar.entitlements"; sourceTree = "<group>"; };
+		BCA87F365063479BBC65A4C8 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "TranslatorBar/Assets.xcassets"; sourceTree = "<group>"; };
+		115E3A8C2340416CA3354089 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslatorBarApp.swift"; path = "TranslatorBar/TranslatorBarApp.swift"; sourceTree = "<group>"; };
+		643D42AE632344639A068063 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslationService.swift"; path = "TranslatorBar/Core/TranslationService.swift"; sourceTree = "<group>"; };
+		6CFCA23E9A5042C3A336AFE0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SpeechService.swift"; path = "TranslatorBar/Core/SpeechService.swift"; sourceTree = "<group>"; };
+		545E52BEF6AE4D8198F0D2D3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HotkeyManager.swift"; path = "TranslatorBar/Core/HotkeyManager.swift"; sourceTree = "<group>"; };
+		1DC208B17D6B42598B131064 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslationViewModel.swift"; path = "TranslatorBar/Core/TranslationViewModel.swift"; sourceTree = "<group>"; };
+		7F8F9EF17FBF49CE80603B71 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MenuBarPanelView.swift"; path = "TranslatorBar/Views/MenuBarPanelView.swift"; sourceTree = "<group>"; };
+		0E424B9E78E2427CB8D450D9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FloatingWindowController.swift"; path = "TranslatorBar/Views/FloatingWindowController.swift"; sourceTree = "<group>"; };
+		68A5E9648CD34207A364105D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FloatingResultView.swift"; path = "TranslatorBar/Views/FloatingResultView.swift"; sourceTree = "<group>"; };
+		9D3B3E66E1A543A1A5003A3B = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslationServiceTests.swift"; path = "TranslatorBarTests/TranslationServiceTests.swift"; sourceTree = "<group>"; };
+		E378D8E3C5C44483BCC1573A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SpeechServiceTests.swift"; path = "TranslatorBarTests/SpeechServiceTests.swift"; sourceTree = "<group>"; };
+		EBB01B677F0C4041AFFD4829 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HotkeyManagerTests.swift"; path = "TranslatorBarTests/HotkeyManagerTests.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4FDE4C2C72F040F2A523AB70 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C86D39D11B6146DCB1200E63 = {
+			isa = PBXGroup;
+			children = (
+				7A53544F738F4769A5E1EE98,
+				C116DF766C4E417DB9049A4E,
+				115E3A8C2340416CA3354089,
+				FBB851821F714AD893E2A356,
+				EF9045DB37E3429D995DDA71,
+				BCA87F365063479BBC65A4C8,
+				9F5ED46A97A6489C98AD9364,
+				DBE10F1C64974750B7894EB5,
+			);
+			sourceTree = "<group>";
+		};
+		DBE10F1C64974750B7894EB5 = {
+			isa = PBXGroup;
+			children = (
+				D2743449C79647C49DAC2874,
+				852D54B343F7437485932F48,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7A53544F738F4769A5E1EE98 = {
+			isa = PBXGroup;
+			children = (
+				643D42AE632344639A068063,
+				6CFCA23E9A5042C3A336AFE0,
+				545E52BEF6AE4D8198F0D2D3,
+				1DC208B17D6B42598B131064,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		C116DF766C4E417DB9049A4E = {
+			isa = PBXGroup;
+			children = (
+				7F8F9EF17FBF49CE80603B71,
+				0E424B9E78E2427CB8D450D9,
+				68A5E9648CD34207A364105D,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		9F5ED46A97A6489C98AD9364 = {
+			isa = PBXGroup;
+			children = (
+				9D3B3E66E1A543A1A5003A3B,
+				E378D8E3C5C44483BCC1573A,
+				EBB01B677F0C4041AFFD4829,
+			);
+			name = TranslatorBarTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CA6BA6B4DB9A4D56AA20D517 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22DC6E87B5B14420A60199B7;
+			buildPhases = (
+				AFE5986C0FD647A0BF949752,
+				4FDE4C2C72F040F2A523AB70,
+				7B68D208ED454B7EA37E846D,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TranslatorBar;
+			productName = TranslatorBar;
+			productReference = D2743449C79647C49DAC2874;
+			productType = "com.apple.product-type.application";
+		};
+		D1763104DFA340BD861F2CA1 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 168E31F7414D4E2A8A195914;
+			buildPhases = (
+				E85DEC2CF0954CDD8423185E,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TranslatorBarTests;
+			productName = TranslatorBarTests;
+			productReference = 852D54B343F7437485932F48;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0A86E35995324FBBB2D18ED8 = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					CA6BA6B4DB9A4D56AA20D517 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					D1763104DFA340BD861F2CA1 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = CA6BA6B4DB9A4D56AA20D517;
+					};
+				};
+			};
+			buildConfigurationList = 9AEE8E5FFF7C4CC1A224B155;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C86D39D11B6146DCB1200E63;
+			productRefGroup = DBE10F1C64974750B7894EB5;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CA6BA6B4DB9A4D56AA20D517,
+				D1763104DFA340BD861F2CA1,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7B68D208ED454B7EA37E846D = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A700792FC2F439CB16D4AB5,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AFE5986C0FD647A0BF949752 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFE4648DD7EC420EBF8A65FD,
+				8545298C84E7426FAE720865,
+				E8DE3182C0304FE1826FC89A,
+				C987A2ECB348498D93DCC81D,
+				0B91B84E41CF4F64B96616E4,
+				615C1B38F97D4F21B707F1F9,
+				FA1BC4ACF8354D4084D98897,
+				E6A9D0B317E541B2B584EA08,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E85DEC2CF0954CDD8423185E = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66468D03653C4F7CAB66FFC2,
+				3F2F4EAFD40C426693A59E04,
+				511EDCA24CA1400687851D05,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A9EAC418023E4E13B4EB8716 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("DEBUG=1", "$(inherited)");
+				MACOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6EF345C978ED4EC49A884F81 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		BA1FB040C9534420A4C43E62 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TranslatorBar/TranslatorBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = W9YMHSGLWM;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = TranslatorBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks");
+				MACOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ivanqi.TranslatorBar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1CC317D5628942E8B4A3CBB7 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TranslatorBar/TranslatorBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = W9YMHSGLWM;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = TranslatorBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../Frameworks");
+				MACOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ivanqi.TranslatorBar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CCFB8BACB85240F2AB3FDB72 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W9YMHSGLWM;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ivanqi.TranslatorBarTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TranslatorBar.app/Contents/MacOS/TranslatorBar";
+			};
+			name = Debug;
+		};
+		2913D5D4A15B42E29AA72618 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W9YMHSGLWM;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ivanqi.TranslatorBarTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TranslatorBar.app/Contents/MacOS/TranslatorBar";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9AEE8E5FFF7C4CC1A224B155 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9EAC418023E4E13B4EB8716,
+				6EF345C978ED4EC49A884F81,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		22DC6E87B5B14420A60199B7 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA1FB040C9534420A4C43E62,
+				1CC317D5628942E8B4A3CBB7,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		168E31F7414D4E2A8A195914 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CCFB8BACB85240F2AB3FDB72,
+				2913D5D4A15B42E29AA72618,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 0A86E35995324FBBB2D18ED8;
+}
