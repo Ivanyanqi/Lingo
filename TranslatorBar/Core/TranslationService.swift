@@ -38,9 +38,13 @@ final class TranslationService: TranslationServiceProtocol {
 
     func translate(text: String, langPair: String? = nil) async throws -> String {
         let pair = langPair ?? Self.detectLangPair(text)
-        guard let encoded = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "https://api.mymemory.translated.net/get?q=\(encoded)&langpair=\(pair)")
-        else { throw TranslationError.invalidResponse }
+        // 用 URLComponents 构建 URL，避免手动编码导致的双重编码问题
+        var components = URLComponents(string: "https://api.mymemory.translated.net/get")!
+        components.queryItems = [
+            URLQueryItem(name: "q", value: text),
+            URLQueryItem(name: "langpair", value: pair)
+        ]
+        guard let url = components.url else { throw TranslationError.invalidResponse }
 
         var request = URLRequest(url: url, timeoutInterval: 10)
         request.setValue("TranslatorBar/1.0", forHTTPHeaderField: "User-Agent")
@@ -65,9 +69,7 @@ final class TranslationService: TranslationServiceProtocol {
             let responseData: ResponseData
         }
         let decoded = try JSONDecoder().decode(Response.self, from: data)
-        let raw = decoded.responseData.translatedText
-        // MyMemory 有时返回 URL-encoded 字符串，需要解码
-        let text = raw.removingPercentEncoding ?? raw
+        let text = decoded.responseData.translatedText
         guard !text.isEmpty else { throw TranslationError.emptyResult }
         return text
     }
