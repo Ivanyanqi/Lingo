@@ -8,6 +8,7 @@ struct LingoApp: App {
     @ObservedObject private var hotkeyManager = HotkeyManager.shared
     @State private var showAccessibilityAlert = false
     private let floatingController = FloatingWindowController()
+    private let selectionController = SelectionButtonController()
 
     var body: some Scene {
         MenuBarExtra {
@@ -15,6 +16,7 @@ struct LingoApp: App {
                 .environmentObject(viewModel)
                 .onAppear {
                     setupHotkey()
+                    setupSelectionButton()
                     checkAccessibility()
                 }
                 .alert("需要辅助功能权限", isPresented: $showAccessibilityAlert) {
@@ -36,7 +38,6 @@ struct LingoApp: App {
     @ViewBuilder
     private var menuBarLabel: some View {
         if viewModel.isTranslating {
-            // 翻译中：旋转动画
             if #available(macOS 15.0, *) {
                 Image(systemName: "arrow.triangle.2.circlepath")
                     .symbolEffect(.rotate)
@@ -44,7 +45,6 @@ struct LingoApp: App {
                 Image(systemName: "arrow.triangle.2.circlepath")
             }
         } else if let preview = viewModel.menuBarPreview, !preview.isEmpty {
-            // 翻译完成：短暂显示译文前几个字
             HStack(spacing: 4) {
                 Image(systemName: "character.bubble")
                     .font(.system(size: 12))
@@ -71,6 +71,8 @@ struct LingoApp: App {
         HotkeyManager.shared.onTranslateRequest = { [weak viewModel] text in
             DispatchQueue.main.async {
                 guard let vm = viewModel else { return }
+                // 隐藏划词按钮（如果正在显示）
+                selectionController.hideButton()
                 vm.translate(text: text)
                 Task { @MainActor in
                     try? await Task.sleep(nanoseconds: 50_000_000)
@@ -79,5 +81,19 @@ struct LingoApp: App {
             }
         }
         HotkeyManager.shared.start()
+    }
+
+    private func setupSelectionButton() {
+        selectionController.onTranslateRequest = { [weak viewModel] text in
+            DispatchQueue.main.async {
+                guard let vm = viewModel else { return }
+                vm.translate(text: text)
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 50_000_000)
+                    self.floatingController.show(viewModel: vm)
+                }
+            }
+        }
+        selectionController.start()
     }
 }
