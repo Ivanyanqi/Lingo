@@ -1,5 +1,5 @@
 import XCTest
-@testable import TranslatorBar
+@testable import Lingo
 
 final class SpeechServiceTests: XCTestCase {
 

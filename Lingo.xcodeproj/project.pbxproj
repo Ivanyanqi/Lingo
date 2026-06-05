@@ -20,6 +20,10 @@
 		66468D03653C4F7CAB66FFC2 = {isa = PBXBuildFile; fileRef = 9D3B3E66E1A543A1A5003A3B; };
 		3F2F4EAFD40C426693A59E04 = {isa = PBXBuildFile; fileRef = E378D8E3C5C44483BCC1573A; };
 		511EDCA24CA1400687851D05 = {isa = PBXBuildFile; fileRef = EBB01B677F0C4041AFFD4829; };
+		1C013E9BE5DC42D2A91A27FF = {isa = PBXBuildFile; fileRef = EFB0495BD2C549B3B85BFD85; };
+		1B1CDD3CE84641E0945024E1 = {isa = PBXBuildFile; fileRef = 598DD361188C4C79B6E5440D; };
+		FAC2F63BCA344290A2995F1B = {isa = PBXBuildFile; fileRef = B342057244A84170B9446889; };
+		27DF303800F1433DBBA25BE2 = {isa = PBXBuildFile; fileRef = A35D814CCBCB4E1792F99C9A; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,10 @@
 		9D3B3E66E1A543A1A5003A3B = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslationServiceTests.swift"; path = "LingoTests/TranslationServiceTests.swift"; sourceTree = "<group>"; };
 		E378D8E3C5C44483BCC1573A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SpeechServiceTests.swift"; path = "LingoTests/SpeechServiceTests.swift"; sourceTree = "<group>"; };
 		EBB01B677F0C4041AFFD4829 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HotkeyManagerTests.swift"; path = "LingoTests/HotkeyManagerTests.swift"; sourceTree = "<group>"; };
+		EFB0495BD2C549B3B85BFD85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslationCache.swift"; path = "Lingo/Core/TranslationCache.swift"; sourceTree = "<group>"; };
+		598DD361188C4C79B6E5440D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HistoryStore.swift"; path = "Lingo/Core/HistoryStore.swift"; sourceTree = "<group>"; };
+		B342057244A84170B9446889 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TargetLanguage.swift"; path = "Lingo/Core/TargetLanguage.swift"; sourceTree = "<group>"; };
+		A35D814CCBCB4E1792F99C9A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LaunchAtLoginManager.swift"; path = "Lingo/Core/LaunchAtLoginManager.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +91,10 @@
 				6CFCA23E9A5042C3A336AFE0,
 				545E52BEF6AE4D8198F0D2D3,
 				1DC208B17D6B42598B131064,
+				EFB0495BD2C549B3B85BFD85,
+				598DD361188C4C79B6E5440D,
+				B342057244A84170B9446889,
+				A35D814CCBCB4E1792F99C9A,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -202,6 +214,10 @@
 				E8DE3182C0304FE1826FC89A,
 				C987A2ECB348498D93DCC81D,
 				0B91B84E41CF4F64B96616E4,
+				1C013E9BE5DC42D2A91A27FF,
+				1B1CDD3CE84641E0945024E1,
+				FAC2F63BCA344290A2995F1B,
+				27DF303800F1433DBBA25BE2,
 				615C1B38F97D4F21B707F1F9,
 				FA1BC4ACF8354D4084D98897,
 				E6A9D0B317E541B2B584EA08,

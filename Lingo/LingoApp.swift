@@ -2,7 +2,9 @@ import SwiftUI
 
 @main
 struct LingoApp: App {
-    @StateObject private var viewModel = TranslationViewModel()
+    @StateObject private var viewModel = TranslationViewModel(
+        translationService: TranslationServiceFactory.make()
+    )
     @ObservedObject private var hotkeyManager = HotkeyManager.shared
     @State private var showAccessibilityAlert = false
     private let floatingController = FloatingWindowController()
@@ -26,18 +28,35 @@ struct LingoApp: App {
                     Text("Lingo 需要辅助功能权限才能使用 \(hotkeyManager.config.displayString) 快捷键翻译选中文字。")
                 }
         } label: {
-            if viewModel.isTranslating {
-                if #available(macOS 15.0, *) {
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                        .symbolEffect(.rotate)
-                } else {
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                }
-            } else {
-                Image(systemName: "character.bubble")
-            }
+            menuBarLabel
         }
         .menuBarExtraStyle(.window)
+    }
+
+    @ViewBuilder
+    private var menuBarLabel: some View {
+        if viewModel.isTranslating {
+            // 翻译中：旋转动画
+            if #available(macOS 15.0, *) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .symbolEffect(.rotate)
+            } else {
+                Image(systemName: "arrow.triangle.2.circlepath")
+            }
+        } else if let preview = viewModel.menuBarPreview, !preview.isEmpty {
+            // 翻译完成：短暂显示译文前几个字
+            HStack(spacing: 4) {
+                Image(systemName: "character.bubble")
+                    .font(.system(size: 12))
+                Text(preview)
+                    .font(.system(size: 11, weight: .medium))
+                    .lineLimit(1)
+                    .transition(.opacity)
+            }
+            .animation(.easeInOut(duration: 0.2), value: preview)
+        } else {
+            Image(systemName: "character.bubble")
+        }
     }
 
     private func checkAccessibility() {
@@ -53,9 +72,7 @@ struct LingoApp: App {
             DispatchQueue.main.async {
                 guard let vm = viewModel else { return }
                 vm.translate(text: text)
-                // 等待翻译完成后显示悬浮窗
                 Task { @MainActor in
-                    // 短暂延迟确保翻译状态已更新为 loading
                     try? await Task.sleep(nanoseconds: 50_000_000)
                     self.floatingController.show(viewModel: vm)
                 }
