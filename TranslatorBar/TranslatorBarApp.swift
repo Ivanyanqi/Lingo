@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct TranslatorBarApp: App {
     @StateObject private var viewModel = TranslationViewModel()
+    @ObservedObject private var hotkeyManager = HotkeyManager.shared
     @State private var showAccessibilityAlert = false
     private let floatingController = FloatingWindowController()
 
@@ -22,7 +23,7 @@ struct TranslatorBarApp: App {
                     }
                     Button("稍后再说", role: .cancel) {}
                 } message: {
-                    Text("TranslatorBar 需要辅助功能权限才能使用 ⌥Space 快捷键翻译选中文字。")
+                    Text("TranslatorBar 需要辅助功能权限才能使用 \(hotkeyManager.config.displayString) 快捷键翻译选中文字。")
                 }
         } label: {
             if viewModel.isTranslating {

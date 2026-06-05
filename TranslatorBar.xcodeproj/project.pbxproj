@@ -16,6 +16,7 @@
 		615C1B38F97D4F21B707F1F9 = {isa = PBXBuildFile; fileRef = 7F8F9EF17FBF49CE80603B71; };
 		FA1BC4ACF8354D4084D98897 = {isa = PBXBuildFile; fileRef = 0E424B9E78E2427CB8D450D9; };
 		E6A9D0B317E541B2B584EA08 = {isa = PBXBuildFile; fileRef = 68A5E9648CD34207A364105D; };
+		AA11BB22CC33DD44EE55FF66 = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF67; };
 		66468D03653C4F7CAB66FFC2 = {isa = PBXBuildFile; fileRef = 9D3B3E66E1A543A1A5003A3B; };
 		3F2F4EAFD40C426693A59E04 = {isa = PBXBuildFile; fileRef = E378D8E3C5C44483BCC1573A; };
 		511EDCA24CA1400687851D05 = {isa = PBXBuildFile; fileRef = EBB01B677F0C4041AFFD4829; };
@@ -35,6 +36,7 @@
 		7F8F9EF17FBF49CE80603B71 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MenuBarPanelView.swift"; path = "TranslatorBar/Views/MenuBarPanelView.swift"; sourceTree = "<group>"; };
 		0E424B9E78E2427CB8D450D9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FloatingWindowController.swift"; path = "TranslatorBar/Views/FloatingWindowController.swift"; sourceTree = "<group>"; };
 		68A5E9648CD34207A364105D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FloatingResultView.swift"; path = "TranslatorBar/Views/FloatingResultView.swift"; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF67 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HotkeySettingsView.swift"; path = "TranslatorBar/Views/HotkeySettingsView.swift"; sourceTree = "<group>"; };
 		9D3B3E66E1A543A1A5003A3B = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TranslationServiceTests.swift"; path = "TranslatorBarTests/TranslationServiceTests.swift"; sourceTree = "<group>"; };
 		E378D8E3C5C44483BCC1573A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SpeechServiceTests.swift"; path = "TranslatorBarTests/SpeechServiceTests.swift"; sourceTree = "<group>"; };
 		EBB01B677F0C4041AFFD4829 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HotkeyManagerTests.swift"; path = "TranslatorBarTests/HotkeyManagerTests.swift"; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				7F8F9EF17FBF49CE80603B71,
 				0E424B9E78E2427CB8D450D9,
 				68A5E9648CD34207A364105D,
+				AA11BB22CC33DD44EE55FF67,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -202,6 +205,7 @@
 				615C1B38F97D4F21B707F1F9,
 				FA1BC4ACF8354D4084D98897,
 				E6A9D0B317E541B2B584EA08,
+				AA11BB22CC33DD44EE55FF66,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

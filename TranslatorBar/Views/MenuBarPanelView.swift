@@ -3,6 +3,8 @@ import SwiftUI
 struct MenuBarPanelView: View {
     @EnvironmentObject var viewModel: TranslationViewModel
     @FocusState private var isInputFocused: Bool
+    @ObservedObject private var hotkeyManager = HotkeyManager.shared
+    @State private var showHotkeySettings = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -87,14 +89,38 @@ struct MenuBarPanelView: View {
             Divider()
 
             // ── Footer ───────────────────────────────────────────────────────
-            HStack {
-                Text("⌥Space 翻译选中文字")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.quaternary)
+            HStack(spacing: 6) {
+                // 快捷键状态
+                if hotkeyManager.config.isEnabled {
+                    Image(systemName: "keyboard")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.quaternary)
+                    Text("\(hotkeyManager.config.displayString) 翻译选中文字")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.quaternary)
+                } else {
+                    Image(systemName: "keyboard.slash")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.quaternary)
+                    Text("快捷键已禁用")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.quaternary)
+                }
                 Spacer()
                 Text("MyMemory")
                     .font(.system(size: 10))
                     .foregroundStyle(.quaternary)
+                // 设置按钮
+                Button(action: { showHotkeySettings = true }) {
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.tertiary)
+                }
+                .buttonStyle(.plain)
+                .help("快捷键设置")
+                .popover(isPresented: $showHotkeySettings, arrowEdge: .bottom) {
+                    HotkeySettingsView()
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
