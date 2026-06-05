@@ -616,6 +616,29 @@ struct SettingsTabView: View {
                 if !HotkeyManager.checkAccessibilityPermission() {
                     AccessibilityWarningView()
                 }
+
+                // ── 退出 ────────────────────────────────────────────────────
+                Divider()
+                    .padding(.top, 4)
+
+                Button(action: { NSApplication.shared.terminate(nil) }) {
+                    HStack {
+                        Image(systemName: "power")
+                            .font(.system(size: 13))
+                        Text("退出 Lingo")
+                            .font(.system(size: 13))
+                    }
+                    .foregroundStyle(.red.opacity(0.8))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.red.opacity(0.06))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.red.opacity(0.15), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
             }
             .padding(14)
         }
