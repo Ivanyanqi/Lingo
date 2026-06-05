@@ -10,7 +10,7 @@ struct MenuBarPanelView: View {
         VStack(spacing: 0) {
             // ── Header ──────────────────────────────────────────────────────
             HStack {
-                Label("TranslatorBar", systemImage: "character.bubble")
+                Label("Lingo", systemImage: "character.bubble")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.primary)
                 Spacer()

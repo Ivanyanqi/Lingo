@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>TranslatorBar</string>
+    <string>Lingo</string>
     <key>CFBundleIdentifier</key>
-    <string>ivanqi.TranslatorBar</string>
+    <string>ivanqi.Lingo</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleShortVersionString</key>
@@ -19,7 +19,7 @@
     <key>LSUIElement</key>
     <true/>
     <key>NSAccessibilityUsageDescription</key>
-    <string>TranslatorBar 需要辅助功能权限以支持全局快捷键翻译选中文字。</string>
+    <string>Lingo 需要辅助功能权限以支持全局快捷键翻译选中文字。</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 </dict>

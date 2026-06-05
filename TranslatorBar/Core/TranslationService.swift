@@ -47,7 +47,7 @@ final class TranslationService: TranslationServiceProtocol {
         guard let url = components.url else { throw TranslationError.invalidResponse }
 
         var request = URLRequest(url: url, timeoutInterval: 10)
-        request.setValue("TranslatorBar/1.0", forHTTPHeaderField: "User-Agent")
+        request.setValue("Lingo/1.0", forHTTPHeaderField: "User-Agent")
 
         let (data, response): (Data, URLResponse)
         do {
