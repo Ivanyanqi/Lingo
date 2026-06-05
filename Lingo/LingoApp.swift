@@ -8,7 +8,7 @@ struct LingoApp: App {
     @ObservedObject private var hotkeyManager = HotkeyManager.shared
     @State private var showAccessibilityAlert = false
     private let floatingController = FloatingWindowController()
-    private let selectionController = SelectionButtonController()
+    private let selectionController = SelectionButtonController.shared
 
     var body: some Scene {
         MenuBarExtra {

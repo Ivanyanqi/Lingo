@@ -77,10 +77,26 @@ struct MenuBarPanelView: View {
 
 struct TranslateTabView: View {
     @EnvironmentObject var viewModel: TranslationViewModel
+    @ObservedObject private var networkMonitor = NetworkMonitor.shared
     @FocusState private var isInputFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
+            // 网络断开提示条
+            if !networkMonitor.isConnected {
+                HStack(spacing: 6) {
+                    Image(systemName: "wifi.slash")
+                        .font(.system(size: 11))
+                    Text("网络不可用，已缓存的翻译仍可使用")
+                        .font(.system(size: 11))
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+                .background(Color.orange.opacity(0.85))
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+
             // 语言选择器
             HStack {
                 LanguageSelectorView()
@@ -128,7 +144,7 @@ struct TranslateTabView: View {
                 HStack {
                     Text("\(viewModel.inputText.count) / 500")
                         .font(.system(size: 11))
-                        .foregroundStyle(.tertiary)
+                        .foregroundColor(viewModel.inputText.count >= 450 ? .red : Color(.tertiaryLabelColor))
                     Spacer()
                     if !viewModel.inputText.isEmpty {
                         Button(action: { viewModel.speakSource() }) {
@@ -295,15 +311,16 @@ struct ResultAreaView: View {
                             .transition(.opacity.animation(.easeIn(duration: 0.2)))
 
                         HStack {
-                            // 收藏按钮
-                            if let latest = HistoryStore.shared.entries.first {
-                                Button(action: { HistoryStore.shared.toggleFavorite(id: latest.id) }) {
-                                    Image(systemName: latest.isFavorite ? "star.fill" : "star")
+                            // 收藏按钮：通过 currentEntryID 精确匹配当前翻译条目
+                            if let entryID = viewModel.currentEntryID,
+                               let entry = HistoryStore.shared.entries.first(where: { $0.id == entryID }) {
+                                Button(action: { HistoryStore.shared.toggleFavorite(id: entryID) }) {
+                                    Image(systemName: entry.isFavorite ? "star.fill" : "star")
                                         .font(.system(size: 13))
-                                        .foregroundStyle(latest.isFavorite ? .yellow : .secondary)
+                                        .foregroundStyle(entry.isFavorite ? .yellow : .secondary)
                                 }
                                 .buttonStyle(.plain)
-                                .help(latest.isFavorite ? "取消收藏" : "收藏")
+                                .help(entry.isFavorite ? "取消收藏" : "收藏")
                             }
                             Spacer()
                             Button(action: { viewModel.speakResult() }) {
@@ -490,6 +507,7 @@ struct SettingsTabView: View {
     @EnvironmentObject var viewModel: TranslationViewModel
     @ObservedObject private var hotkeyManager = HotkeyManager.shared
     @ObservedObject private var launchManager = LaunchAtLoginManager.shared
+    @ObservedObject private var selectionController = SelectionButtonController.shared
     @State private var showHotkeySettings = false
     @State private var selectedEngine = TranslationEngine.load()
     @State private var deepLKey = TranslationEngine.deepLAPIKey
@@ -506,7 +524,8 @@ struct SettingsTabView: View {
                     ForEach(TranslationEngine.allCases, id: \.self) { engine in
                         Button(action: {
                             selectedEngine = engine
-                            TranslationEngine.save(engine)
+                            // 通过 ViewModel 切换，立即生效
+                            viewModel.currentEngine = engine
                         }) {
                             HStack {
                                 Image(systemName: selectedEngine == engine ? "checkmark.circle.fill" : "circle")
@@ -607,6 +626,23 @@ struct SettingsTabView: View {
                     ))
                     .toggleStyle(.switch)
                     .labelsHidden()
+                }
+                .padding(12)
+                .background(Color(.controlBackgroundColor))
+                .cornerRadius(8)
+
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("划词悬浮翻译按钮")
+                            .font(.system(size: 13))
+                        Text("选中文字后显示「译」按钮，点击即可翻译")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Toggle("", isOn: $selectionController.isEnabled)
+                        .toggleStyle(.switch)
+                        .labelsHidden()
                 }
                 .padding(12)
                 .background(Color(.controlBackgroundColor))

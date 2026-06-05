@@ -1,55 +1,106 @@
 import Foundation
 import AVFoundation
 
+/// 语音朗读服务
+/// 优先使用系统 AVSpeechSynthesizer（稳定、离线可用），
+/// 系统 TTS 不支持该语言时降级到 Google TTS（需联网）。
 final class SpeechService: NSObject {
     static let shared = SpeechService()
-    private var audioPlayer: AVAudioPlayer?
-    private let synthesizer = AVSpeechSynthesizer()
 
-    /// 语言代码映射：zh → zh-CN，其他保持原样
+    private let synthesizer = AVSpeechSynthesizer()
+    private var audioPlayer: AVAudioPlayer?
+    private var currentTask: Task<Void, Never>?
+
+    // MARK: - Language Code
+
+    /// 将 langPair 转换为 BCP-47 语言代码
     static func ttsLangCode(langPair: String, speakSource: Bool) -> String {
         let parts = langPair.split(separator: "|").map(String.init)
         let lang = speakSource ? (parts.first ?? "en") : (parts.last ?? "zh")
-        return lang == "zh" ? "zh-CN" : lang
+        // 映射到完整 BCP-47 代码，提升系统 TTS 识别率
+        let map: [String: String] = [
+            "zh": "zh-CN",
+            "en": "en-US",
+            "ja": "ja-JP",
+            "ko": "ko-KR",
+            "fr": "fr-FR",
+            "es": "es-ES",
+            "de": "de-DE",
+            "pt": "pt-BR",
+            "ru": "ru-RU"
+        ]
+        return map[lang.lowercased()] ?? lang
     }
 
-    /// 构建 Google TTS URL
-    static func buildGoogleTTSURL(text: String, lang: String) -> URL? {
-        guard let encoded = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        else { return nil }
-        return URL(string: "https://translate.googleapis.com/translate_tts?ie=UTF-8&q=\(encoded)&tl=\(lang)&client=gtx")
-    }
+    // MARK: - Speak
 
-    /// 发音：优先 Google TTS，失败降级系统 TTS
+    /// 朗读文字：优先系统 TTS，不可用时降级 Google TTS
     func speak(text: String, langPair: String, speakSource: Bool) {
+        stop()
         let lang = Self.ttsLangCode(langPair: langPair, speakSource: speakSource)
-        guard let url = Self.buildGoogleTTSURL(text: text, lang: lang) else {
-            fallbackSpeak(text: text, lang: lang)
-            return
-        }
-        Task {
-            do {
-                var request = URLRequest(url: url, timeoutInterval: 5)
-                request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
-                let (data, _) = try await URLSession.shared.data(for: request)
-                await MainActor.run {
-                    self.audioPlayer = try? AVAudioPlayer(data: data)
-                    self.audioPlayer?.play()
-                }
-            } catch {
-                await MainActor.run { self.fallbackSpeak(text: text, lang: lang) }
+
+        // 检查系统是否有对应语言的声音
+        if let voice = AVSpeechSynthesisVoice(language: lang) {
+            systemSpeak(text: text, voice: voice)
+        } else {
+            // 降级：Google TTS（非官方接口，仅作备用）
+            currentTask = Task { [weak self] in
+                await self?.googleSpeak(text: text, lang: lang)
             }
         }
     }
 
-    private func fallbackSpeak(text: String, lang: String) {
+    // MARK: - System TTS
+
+    private func systemSpeak(text: String, voice: AVSpeechSynthesisVoice) {
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: lang)
+        utterance.voice = voice
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         synthesizer.speak(utterance)
     }
 
+    // MARK: - Google TTS (fallback)
+
+    private func googleSpeak(text: String, lang: String) async {
+        guard let encoded = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "https://translate.googleapis.com/translate_tts?ie=UTF-8&q=\(encoded)&tl=\(lang)&client=gtx")
+        else {
+            // 最终降级：用英语系统声音
+            await MainActor.run {
+                let utterance = AVSpeechUtterance(string: text)
+                utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                self.synthesizer.speak(utterance)
+            }
+            return
+        }
+
+        do {
+            var request = URLRequest(url: url, timeoutInterval: 5)
+            request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+            let (data, _) = try await URLSession.shared.data(for: request)
+            await MainActor.run {
+                self.audioPlayer = try? AVAudioPlayer(data: data)
+                self.audioPlayer?.play()
+            }
+        } catch {
+            // 网络失败：最终降级到系统 TTS（无声音也不崩溃）
+            await MainActor.run {
+                let utterance = AVSpeechUtterance(string: text)
+                utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                self.synthesizer.speak(utterance)
+            }
+        }
+    }
+
+    // MARK: - Stop
+
     func stop() {
+        currentTask?.cancel()
+        currentTask = nil
         audioPlayer?.stop()
-        synthesizer.stopSpeaking(at: .immediate)
+        audioPlayer = nil
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+        }
     }
 }

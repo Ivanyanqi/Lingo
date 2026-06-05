@@ -42,7 +42,8 @@ final class HistoryStore: ObservableObject {
 
     // MARK: - Public API
 
-    func add(source: String, translated: String, langPair: String) {
+    @discardableResult
+    func add(source: String, translated: String, langPair: String) -> UUID {
         // 去重：相同原文+语言对已存在则移到最前
         entries.removeAll { $0.sourceText == source && $0.langPair == langPair }
         let entry = HistoryEntry(sourceText: source, translatedText: translated, langPair: langPair)
@@ -51,6 +52,7 @@ final class HistoryStore: ObservableObject {
             entries = Array(entries.prefix(maxCount))
         }
         save()
+        return entry.id
     }
 
     func toggleFavorite(id: UUID) {

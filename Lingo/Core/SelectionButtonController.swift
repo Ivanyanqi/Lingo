@@ -3,9 +3,25 @@ import SwiftUI
 
 /// 划词悬浮翻译按钮控制器
 /// 监听全局鼠标松开事件 → 检测选中文字 → 在选区旁显示小按钮 → 点击触发翻译
-final class SelectionButtonController {
+final class SelectionButtonController: ObservableObject {
+
+    static let shared = SelectionButtonController()
 
     var onTranslateRequest: ((String) -> Void)?
+
+    private static let enabledKey = "selectionButtonEnabled"
+
+    /// 是否启用划词悬浮按钮（持久化）
+    @Published var isEnabled: Bool = UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? true {
+        didSet {
+            UserDefaults.standard.set(isEnabled, forKey: Self.enabledKey)
+            if isEnabled {
+                startMonitor()
+            } else {
+                stopMonitor()
+            }
+        }
+    }
 
     private var buttonPanel: NSPanel?
     private var mouseUpMonitor: Any?
@@ -15,13 +31,22 @@ final class SelectionButtonController {
     // MARK: - Lifecycle
 
     func start() {
+        guard isEnabled else { return }
+        startMonitor()
+    }
+
+    func stop() {
+        stopMonitor()
+    }
+
+    private func startMonitor() {
         guard mouseUpMonitor == nil else { return }
         mouseUpMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseUp) { [weak self] event in
             self?.handleMouseUp(event: event)
         }
     }
 
-    func stop() {
+    private func stopMonitor() {
         if let m = mouseUpMonitor { NSEvent.removeMonitor(m); mouseUpMonitor = nil }
         hideButton()
     }

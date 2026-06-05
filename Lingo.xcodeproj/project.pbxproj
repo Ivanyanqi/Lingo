@@ -25,6 +25,7 @@
 		FAC2F63BCA344290A2995F1B = {isa = PBXBuildFile; fileRef = B342057244A84170B9446889; };
 		27DF303800F1433DBBA25BE2 = {isa = PBXBuildFile; fileRef = A35D814CCBCB4E1792F99C9A; };
 		7568E6F117644D5EA5C93ACE = {isa = PBXBuildFile; fileRef = 4CE58C9F49494850A86BD66B; };
+		C526581E0C6745529614B62C = {isa = PBXBuildFile; fileRef = B4E21BBEA48A4316AD6AA386; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		B342057244A84170B9446889 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TargetLanguage.swift"; path = "Lingo/Core/TargetLanguage.swift"; sourceTree = "<group>"; };
 		A35D814CCBCB4E1792F99C9A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LaunchAtLoginManager.swift"; path = "Lingo/Core/LaunchAtLoginManager.swift"; sourceTree = "<group>"; };
 		4CE58C9F49494850A86BD66B = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SelectionButtonController.swift"; path = "Lingo/Core/SelectionButtonController.swift"; sourceTree = "<group>"; };
+		B4E21BBEA48A4316AD6AA386 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NetworkMonitor.swift"; path = "Lingo/Core/NetworkMonitor.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				B342057244A84170B9446889,
 				A35D814CCBCB4E1792F99C9A,
 				4CE58C9F49494850A86BD66B,
+				B4E21BBEA48A4316AD6AA386,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 				FAC2F63BCA344290A2995F1B,
 				27DF303800F1433DBBA25BE2,
 				7568E6F117644D5EA5C93ACE,
+				C526581E0C6745529614B62C,
 				615C1B38F97D4F21B707F1F9,
 				FA1BC4ACF8354D4084D98897,
 				E6A9D0B317E541B2B584EA08,
