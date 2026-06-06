@@ -6,6 +6,34 @@ All notable changes to Lingo are documented here, organized by version.
 
 ---
 
+## [v0.4.0] — Security & Privacy Hardening
+
+> Focus: Protect local secrets and history data, reduce data exposure during translation workflows, and prepare the app for safer distribution.
+
+### Added
+
+- **App Sandbox support** — Lingo now ships with the macOS App Sandbox enabled, including network client access and user-selected file read/write entitlement for safer runtime isolation.
+- **Container migration manifest** — Added a bundled `container-migration.plist` so existing local app data can move into the sandbox container cleanly on upgrade.
+- **Security regression tests** — Added coverage for entitlements and migration packaging so future changes do not silently drop required security settings.
+- **Encrypted history at rest** — Translation history is now encrypted on disk with AES-GCM. The encryption key is generated locally and stored in the macOS Keychain.
+
+### Changed
+
+- **API keys moved to Keychain** — DeepL and OpenAI keys are no longer stored in `UserDefaults`; they are now persisted in the macOS Keychain and migrated automatically from legacy storage when present.
+- **History moved out of `UserDefaults`** — Translation history now lives in Application Support instead of preferences storage, reducing accidental exposure and avoiding oversized defaults payloads.
+- **Legacy history migrates automatically** — Existing plaintext history files and older `UserDefaults` history are loaded once and rewritten into the encrypted store automatically.
+- **Speech playback is now local-only** — Removed the network TTS fallback path so source and translated text are spoken only through the system voice stack.
+- **Selected-text capture is more privacy-safe** — Global translation now prefers Accessibility-selected text first. Clipboard fallback snapshots and restores clipboard contents to avoid leaving copied text behind.
+- **CSV export no longer writes plaintext temp files** — Export content is produced in memory before save, reducing the chance of sensitive translation data being left in temporary directories.
+
+### Fixed
+
+- **Canceling in-flight translations no longer surfaces false network errors** — Clearing the input while a request is running now cancels cleanly without confusing the user.
+- **Cache hits now keep the current history entry in sync** — Reusing a cached translation correctly updates the current entry state and favorite actions.
+- **Long selected text is truncated consistently** — The same text limit is now enforced across request submission and history persistence paths.
+
+---
+
 ## [v0.3.0] — Bug Fixes & Polish
 
 > Focus: Fix all known issues from v0.2.0 and improve reliability across the board.

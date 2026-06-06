@@ -14,13 +14,14 @@ A lightweight macOS menu bar translator. Select any text, press your hotkey, and
 - **Auto language detection** — automatically detects Chinese ↔ English direction
 - **Multi-language support** — translate to Chinese, English, Japanese, Korean, French, Spanish, German, Portuguese, or Russian
 - **Multiple translation engines** — switch between MyMemory (free), DeepL, and OpenAI in Settings
-- **Translation history** — last 50 translations saved locally, with favorites and CSV export
+- **Translation history** — last 50 translations saved locally, encrypted at rest, with favorites and CSV export
 - **LRU cache** — repeated queries are served instantly from cache, no extra API calls
 - **Floating result window** — translation pops up near your cursor, auto-dismisses after 3 seconds
 - **Text-to-speech** — listen to both source and translated text (system TTS, works offline)
 - **Launch at login** — optional auto-start on login via `SMAppService`
 - **Network awareness** — detects offline state immediately; cached translations still work
 - **Customizable hotkey** — change the shortcut to any key combination you prefer
+- **Privacy hardening** — API keys stored in Keychain, clipboard fallback restores previous clipboard contents, app runs sandboxed
 
 ## Requirements
 
@@ -104,13 +105,14 @@ See [CHANGELOG.md](CHANGELOG.md) for a full version history, or [CHANGELOG_CN.md
 
 | Version | Highlights |
 |---------|-----------|
+| [v0.4.0](CHANGELOG.md#v040--security--privacy-hardening) | App Sandbox, Keychain API keys, encrypted history, local-only TTS, safer clipboard and CSV export |
 | [v0.3.0](CHANGELOG.md#v030--bug-fixes--polish) | Engine switching fix, favorite button fix, 500-char limit, selection button toggle, network awareness, system TTS |
 | [v0.2.0](CHANGELOG.md#v020--full-feature-iteration) | History, multi-language, DeepL/OpenAI engines, LRU cache, debounce, launch at login, selection button, quit button |
 | [v0.1.0](CHANGELOG.md#v010--mvp) | Menu bar app, global hotkey, MyMemory translation, floating window, TTS, customizable hotkey |
 
 ## Privacy
 
-Lingo does not collect any personal data. Text you translate is sent to the translation API you choose (MyMemory, DeepL, or OpenAI) over HTTPS. API keys are stored locally in the macOS Keychain. Translation history stays on your Mac in local app storage, and speech playback uses the system TTS engine only.
+Lingo does not collect any personal data. Text you translate is sent to the translation API you choose (MyMemory, DeepL, or OpenAI) over HTTPS. API keys are stored locally in the macOS Keychain. Translation history stays on your Mac in local app storage and is encrypted at rest. Speech playback uses the system TTS engine only, and clipboard fallback restores your previous clipboard contents after capture.
 
 ## License
 
