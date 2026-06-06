@@ -62,34 +62,12 @@ final class SelectionButtonController: ObservableObject {
 
     private func checkSelectionAndShow(mousePos: CGPoint) {
         // 优先用 Accessibility API 读取选中文字
-        if let text = selectedTextViaAccessibility(), !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if let text = SelectedTextReader.accessibilitySelectedText() {
             showButton(near: mousePos, text: text)
             return
         }
         // 降级：读剪贴板（某些 app 选中后会自动写入剪贴板）
         // 这里不做降级，避免误触发
-    }
-
-    // MARK: - Accessibility 读取选中文字
-
-    private func selectedTextViaAccessibility() -> String? {
-        guard AXIsProcessTrusted() else { return nil }
-
-        let systemWide = AXUIElementCreateSystemWide()
-        var focusedApp: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(systemWide, kAXFocusedApplicationAttribute as CFString, &focusedApp) == .success,
-              let app = focusedApp else { return nil }
-
-        var focusedElement: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(app as! AXUIElement, kAXFocusedUIElementAttribute as CFString, &focusedElement) == .success,
-              let element = focusedElement else { return nil }
-
-        var selectedText: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(element as! AXUIElement, kAXSelectedTextAttribute as CFString, &selectedText) == .success,
-              let text = selectedText as? String,
-              !text.isEmpty else { return nil }
-
-        return text
     }
 
     // MARK: - Show / Hide Button

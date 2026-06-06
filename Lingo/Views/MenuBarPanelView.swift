@@ -363,8 +363,6 @@ struct HistoryTabView: View {
     @EnvironmentObject var viewModel: TranslationViewModel
     @ObservedObject private var historyStore = HistoryStore.shared
     @State private var showFavoritesOnly = false
-    @State private var showExportAlert = false
-    @State private var exportURL: URL? = nil
 
     var displayedEntries: [HistoryEntry] {
         showFavoritesOnly ? historyStore.favorites : historyStore.entries
@@ -433,14 +431,11 @@ struct HistoryTabView: View {
 
     private func exportCSV() {
         let csv = historyStore.exportCSV()
-        let tmpURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("lingo_history.csv")
-        try? csv.write(to: tmpURL, atomically: true, encoding: .utf8)
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "lingo_history.csv"
         panel.allowedContentTypes = [.commaSeparatedText]
         if panel.runModal() == .OK, let dest = panel.url {
-            try? FileManager.default.copyItem(at: tmpURL, to: dest)
+            try? csv.write(to: dest, atomically: true, encoding: .utf8)
         }
     }
 }

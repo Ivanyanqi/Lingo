@@ -48,26 +48,50 @@ enum TranslationEngine: String, CaseIterable, Codable {
     private static let engineKey = "translationEngine"
     private static let deepLKeyKey = "deepLAPIKey"
     private static let openAIKeyKey = "openAIAPIKey"
+    static var userDefaults: UserDefaults = .standard
+    static var secureStore: SecureStore = KeychainStore()
 
     static func load() -> TranslationEngine {
-        guard let raw = UserDefaults.standard.string(forKey: engineKey),
+        guard let raw = userDefaults.string(forKey: engineKey),
               let engine = TranslationEngine(rawValue: raw)
         else { return .myMemory }
         return engine
     }
 
     static func save(_ engine: TranslationEngine) {
-        UserDefaults.standard.set(engine.rawValue, forKey: engineKey)
+        userDefaults.set(engine.rawValue, forKey: engineKey)
     }
 
     static var deepLAPIKey: String {
-        get { UserDefaults.standard.string(forKey: deepLKeyKey) ?? "" }
-        set { UserDefaults.standard.set(newValue, forKey: deepLKeyKey) }
+        get { loadSecret(forKey: deepLKeyKey) }
+        set { saveSecret(newValue, forKey: deepLKeyKey) }
     }
 
     static var openAIAPIKey: String {
-        get { UserDefaults.standard.string(forKey: openAIKeyKey) ?? "" }
-        set { UserDefaults.standard.set(newValue, forKey: openAIKeyKey) }
+        get { loadSecret(forKey: openAIKeyKey) }
+        set { saveSecret(newValue, forKey: openAIKeyKey) }
+    }
+
+    private static func loadSecret(forKey key: String) -> String {
+        if let value = secureStore.string(forKey: key), !value.isEmpty {
+            return value
+        }
+        guard let legacyValue = userDefaults.string(forKey: key),
+              !legacyValue.isEmpty else {
+            return ""
+        }
+        _ = secureStore.setString(legacyValue, forKey: key)
+        userDefaults.removeObject(forKey: key)
+        return legacyValue
+    }
+
+    private static func saveSecret(_ value: String, forKey key: String) {
+        if value.isEmpty {
+            _ = secureStore.removeValue(forKey: key)
+        } else {
+            _ = secureStore.setString(value, forKey: key)
+        }
+        userDefaults.removeObject(forKey: key)
     }
 }
 

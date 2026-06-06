@@ -56,6 +56,7 @@ final class HotkeyManager: ObservableObject {
     }
 
     private var eventTap: CFMachPort?
+    private var eventTapContext: UnsafeMutableRawPointer?
     private let configKey = "hotkeyConfig"
 
     private init() {
@@ -92,13 +93,14 @@ final class HotkeyManager: ObservableObject {
 
         let mask = CGEventMask(1 << CGEventType.keyDown.rawValue)
         let selfPtr = Unmanaged.passRetained(self).toOpaque()
+        eventTapContext = selfPtr
         eventTap = CGEvent.tapCreate(
             tap: .cgSessionEventTap,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: mask,
             callback: { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
-                guard let refcon else { return Unmanaged.passRetained(event) }
+                guard let refcon else { return Unmanaged.passUnretained(event) }
                 let manager = Unmanaged<HotkeyManager>.fromOpaque(refcon).takeUnretainedValue()
                 return manager.handleEvent(proxy: proxy, type: type, event: event)
             },
@@ -118,6 +120,10 @@ final class HotkeyManager: ObservableObject {
         if let tap = eventTap {
             CGEvent.tapEnable(tap: tap, enable: false)
             eventTap = nil
+        }
+        if let context = eventTapContext {
+            Unmanaged<HotkeyManager>.fromOpaque(context).release()
+            eventTapContext = nil
         }
     }
 
@@ -143,10 +149,18 @@ final class HotkeyManager: ObservableObject {
             triggerTranslation()
             return nil // 消费事件
         }
-        return Unmanaged.passRetained(event)
+        return Unmanaged.passUnretained(event)
     }
 
     private func triggerTranslation() {
+        if let text = SelectedTextReader.accessibilitySelectedText() {
+            onTranslateRequest?(text)
+            return
+        }
+
+        let pasteboard = NSPasteboard.general
+        let snapshot = ClipboardSnapshot.capture(from: pasteboard)
+        let originalChangeCount = pasteboard.changeCount
         let source = CGEventSource(stateID: .hidSystemState)
         let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 8, keyDown: true) // C
         let keyUp   = CGEvent(keyboardEventSource: source, virtualKey: 8, keyDown: false)
@@ -156,6 +170,12 @@ final class HotkeyManager: ObservableObject {
         keyUp?.post(tap: .cgAnnotatedSessionEventTap)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
+            defer {
+                if pasteboard.changeCount != originalChangeCount {
+                    snapshot.restore(to: pasteboard)
+                }
+            }
+            guard pasteboard.changeCount != originalChangeCount else { return }
             guard let text = Self.readClipboard(),
                   !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             else { return }

@@ -97,15 +97,17 @@ final class TranslationViewModel: ObservableObject {
 
     /// 立即翻译（快捷键触发时使用）
     func translate(text: String? = nil) {
-        let query = text ?? inputText
-        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         if let text { inputText = text }
+        let query = inputText
+        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
 
         let pair = effectiveLangPair
 
         // 命中缓存直接返回（无需网络）
         if let cached = cache.get(text: query, langPair: pair) {
             translationState = .success(cached)
+            let entryID = historyStore.add(source: query, translated: cached, langPair: pair)
+            currentEntryID = entryID
             showMenuBarPreview(cached)
             return
         }
@@ -118,8 +120,10 @@ final class TranslationViewModel: ObservableObject {
 
         translateTask?.cancel()
         translateTask = Task {
+            guard !Task.isCancelled else { return }
             isTranslating = true
             translationState = .loading
+            defer { isTranslating = false }
             do {
                 let result = try await translationService.translate(text: query, langPair: pair)
                 guard !Task.isCancelled else { return }
@@ -128,6 +132,8 @@ final class TranslationViewModel: ObservableObject {
                 let entryID = historyStore.add(source: query, translated: result, langPair: pair)
                 currentEntryID = entryID
                 showMenuBarPreview(result)
+            } catch is CancellationError {
+                return
             } catch TranslationError.rateLimited {
                 translationState = .error("今日翻译次数已用完")
             } catch TranslationError.emptyResult {
@@ -137,7 +143,6 @@ final class TranslationViewModel: ObservableObject {
             } catch {
                 translationState = .error("网络不可用，请检查连接")
             }
-            isTranslating = false
         }
     }
 

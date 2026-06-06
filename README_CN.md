@@ -110,7 +110,7 @@ open Lingo.xcodeproj
 
 ## 隐私说明
 
-Lingo 不收集任何个人数据。你翻译的文字会通过 HTTPS 发送至你所选择的翻译 API（MyMemory、DeepL 或 OpenAI）。API Key 仅存储在本地 `UserDefaults` 中，不会离开你的设备。
+Lingo 不收集任何个人数据。你翻译的文字会通过 HTTPS 发送至你所选择的翻译 API（MyMemory、DeepL 或 OpenAI）。API Key 仅保存在本机 macOS Keychain 中；翻译历史仅保存在本地应用数据目录；文字朗读只使用系统 TTS，不再把文本发送到第三方语音服务。
 
 ## 开源协议
 

@@ -26,6 +26,27 @@ final class HotkeyManagerTests: XCTestCase {
         XCTAssertNil(result)
     }
 
+    func test_clipboardSnapshot_restoreRestoresPreviousString() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString("before", forType: .string)
+        let snapshot = ClipboardSnapshot.capture(from: NSPasteboard.general)
+
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString("after", forType: .string)
+        snapshot.restore(to: NSPasteboard.general)
+
+        XCTAssertEqual(NSPasteboard.general.string(forType: .string), "before")
+    }
+
+    func test_selectedTextReader_elementFromNil_returnsNil() {
+        XCTAssertNil(SelectedTextReader.element(from: nil))
+    }
+
+    func test_selectedTextReader_elementFromNonAXValue_returnsNil() {
+        let value: CFTypeRef = "not-an-element" as CFString
+        XCTAssertNil(SelectedTextReader.element(from: value))
+    }
+
     // MARK: - 悬浮窗定位
 
     func test_floatingWindowPosition_belowCursor_withinScreen() {

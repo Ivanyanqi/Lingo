@@ -110,7 +110,7 @@ See [CHANGELOG.md](CHANGELOG.md) for a full version history, or [CHANGELOG_CN.md
 
 ## Privacy
 
-Lingo does not collect any personal data. Text you translate is sent to the translation API you choose (MyMemory, DeepL, or OpenAI) over HTTPS. API keys are stored locally in `UserDefaults` and never leave your device.
+Lingo does not collect any personal data. Text you translate is sent to the translation API you choose (MyMemory, DeepL, or OpenAI) over HTTPS. API keys are stored locally in the macOS Keychain. Translation history stays on your Mac in local app storage, and speech playback uses the system TTS engine only.
 
 ## License
 

@@ -30,13 +30,20 @@ struct HistoryEntry: Codable, Identifiable, Equatable {
 /// 本地持久化翻译历史，最多保留 50 条
 final class HistoryStore: ObservableObject {
     static let shared = HistoryStore()
+    private static let legacyStorageKey = "translationHistory"
 
     @Published private(set) var entries: [HistoryEntry] = []
 
     private let maxCount = 50
-    private let storageKey = "translationHistory"
+    private let storageURL: URL
+    private let userDefaults: UserDefaults
 
-    private init() {
+    init(
+        storageURL: URL = HistoryStore.defaultStorageURL(),
+        userDefaults: UserDefaults = .standard
+    ) {
+        self.storageURL = storageURL
+        self.userDefaults = userDefaults
         load()
     }
 
@@ -91,15 +98,38 @@ final class HistoryStore: ObservableObject {
     // MARK: - Persistence
 
     private func save() {
-        if let data = try? JSONEncoder().encode(entries) {
-            UserDefaults.standard.set(data, forKey: storageKey)
-        }
+        guard let data = try? JSONEncoder().encode(entries) else { return }
+        let directory = storageURL.deletingLastPathComponent()
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try? data.write(to: storageURL, options: .atomic)
     }
 
     private func load() {
-        guard let data = UserDefaults.standard.data(forKey: storageKey),
-              let saved = try? JSONDecoder().decode([HistoryEntry].self, from: data)
-        else { return }
+        if let data = try? Data(contentsOf: storageURL),
+           let saved = try? JSONDecoder().decode([HistoryEntry].self, from: data) {
+            entries = saved
+            return
+        }
+
+        guard let legacyData = userDefaults.data(forKey: Self.legacyStorageKey),
+              let saved = try? JSONDecoder().decode([HistoryEntry].self, from: legacyData) else {
+            return
+        }
         entries = saved
+        save()
+        userDefaults.removeObject(forKey: Self.legacyStorageKey)
+    }
+
+    static func defaultStorageURL(fileManager: FileManager = .default) -> URL {
+        let appSupport = (try? fileManager.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )) ?? fileManager.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Application Support", isDirectory: true)
+        return appSupport
+            .appendingPathComponent("Lingo", isDirectory: true)
+            .appendingPathComponent("history.json", isDirectory: false)
     }
 }
