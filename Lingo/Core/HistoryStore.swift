@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 /// 单条翻译历史
@@ -31,19 +32,23 @@ struct HistoryEntry: Codable, Identifiable, Equatable {
 final class HistoryStore: ObservableObject {
     static let shared = HistoryStore()
     private static let legacyStorageKey = "translationHistory"
+    private static let encryptionKeyKey = "historyEncryptionKey"
 
     @Published private(set) var entries: [HistoryEntry] = []
 
     private let maxCount = 50
     private let storageURL: URL
     private let userDefaults: UserDefaults
+    private let secureStore: SecureStore
 
     init(
         storageURL: URL = HistoryStore.defaultStorageURL(),
-        userDefaults: UserDefaults = .standard
+        userDefaults: UserDefaults = .standard,
+        secureStore: SecureStore = KeychainStore(service: "ivanqi.Lingo.history")
     ) {
         self.storageURL = storageURL
         self.userDefaults = userDefaults
+        self.secureStore = secureStore
         load()
     }
 
@@ -98,17 +103,25 @@ final class HistoryStore: ObservableObject {
     // MARK: - Persistence
 
     private func save() {
-        guard let data = try? JSONEncoder().encode(entries) else { return }
+        guard let data = try? JSONEncoder().encode(entries),
+              let encrypted = encrypt(data) else { return }
         let directory = storageURL.deletingLastPathComponent()
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try? data.write(to: storageURL, options: .atomic)
+        try? encrypted.write(to: storageURL, options: .atomic)
     }
 
     private func load() {
-        if let data = try? Data(contentsOf: storageURL),
-           let saved = try? JSONDecoder().decode([HistoryEntry].self, from: data) {
-            entries = saved
-            return
+        if let data = try? Data(contentsOf: storageURL) {
+            if let saved = decodeEncryptedEntries(from: data) {
+                entries = saved
+                return
+            }
+
+            if let saved = try? JSONDecoder().decode([HistoryEntry].self, from: data) {
+                entries = saved
+                save()
+                return
+            }
         }
 
         guard let legacyData = userDefaults.data(forKey: Self.legacyStorageKey),
@@ -118,6 +131,46 @@ final class HistoryStore: ObservableObject {
         entries = saved
         save()
         userDefaults.removeObject(forKey: Self.legacyStorageKey)
+    }
+
+    private func decodeEncryptedEntries(from data: Data) -> [HistoryEntry]? {
+        guard let decrypted = decrypt(data),
+              let saved = try? JSONDecoder().decode([HistoryEntry].self, from: decrypted) else {
+            return nil
+        }
+        return saved
+    }
+
+    private func encrypt(_ data: Data) -> Data? {
+        guard let key = historyKey(),
+              let sealedBox = try? AES.GCM.seal(data, using: key),
+              let combined = sealedBox.combined else {
+            return nil
+        }
+        return combined
+    }
+
+    private func decrypt(_ data: Data) -> Data? {
+        guard let key = historyKey(),
+              let sealedBox = try? AES.GCM.SealedBox(combined: data),
+              let decrypted = try? AES.GCM.open(sealedBox, using: key) else {
+            return nil
+        }
+        return decrypted
+    }
+
+    private func historyKey() -> SymmetricKey? {
+        if let stored = secureStore.string(forKey: Self.encryptionKeyKey),
+           let keyData = Data(base64Encoded: stored) {
+            return SymmetricKey(data: keyData)
+        }
+
+        let key = SymmetricKey(size: .bits256)
+        let keyData = key.withUnsafeBytes { Data($0) }
+        guard secureStore.setString(keyData.base64EncodedString(), forKey: Self.encryptionKeyKey) else {
+            return nil
+        }
+        return key
     }
 
     static func defaultStorageURL(fileManager: FileManager = .default) -> URL {
